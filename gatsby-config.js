@@ -18,7 +18,7 @@ module.exports = {
       resolve: "gatsby-source-graphql",
       options: {
         fieldName: `cms`,
-        url: process.env.API_URL || "http://localhost:1337/graphql",
+        url: "http://15.237.64.108:1337/graphql",
         typeName: `StrapiCMS`,
       },
     },
