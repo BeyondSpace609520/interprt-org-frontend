@@ -21,6 +21,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
           aws-region: us-east-2
 
+      - name: create env file
+        run: |
+          touch .env
+          echo API_URL = ${{ secrets.API_URL }} >> .env
+
       - name: Cache Packages
         uses: actions/cache@v2
         with:
