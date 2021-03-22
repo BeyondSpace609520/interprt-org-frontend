@@ -1,11 +1,18 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Helmet } from "react-helmet";
-import { useStaticQuery, graphql } from "gatsby";
+/**
+ * SEO component that queries for data with
+ *  Gatsby's useStaticQuery React hook
+ *
+ * See: https://www.gatsbyjs.com/docs/use-static-query/
+ */
 
-const SEO = ({ seo = {} }) => {
-  const { strapiGlobal } = useStaticQuery(query);
-  const { defaultSeo, siteName, favicon } = strapiGlobal;
+ import * as React from "react"
+ import PropTypes from "prop-types"
+ import { Helmet } from "react-helmet"
+ import { useStaticQuery, graphql } from "gatsby"
+ 
+ const SEO = ({ seo = {} }) => {
+  const { cms } = useStaticQuery(query);
+  const { defaultSeo, siteName, favicon } = cms.global;
 
   // Merge default and page-specific SEO values
   const fullSeo = { ...defaultSeo, ...seo };
@@ -42,9 +49,7 @@ const SEO = ({ seo = {} }) => {
       );
     }
     if (fullSeo.shareImage) {
-      const imageUrl =
-        (process.env.GATSBY_ROOT_URL || "http://localhost:8000") +
-        fullSeo.shareImage.publicURL;
+      const imageUrl = fullSeo.shareImage.url;
       tags.push(
         {
           name: "image",
@@ -80,29 +85,7 @@ const SEO = ({ seo = {} }) => {
       link={[
         {
           rel: "icon",
-          href: favicon.publicURL,
-        },
-        {
-          rel: "stylesheet",
-          href: "https://fonts.googleapis.com/css?family=Staatliches",
-        },
-        {
-          rel: "stylesheet",
-          href:
-            "https://cdn.jsdelivr.net/npm/uikit@3.2.3/dist/css/uikit.min.css",
-        },
-      ]}
-      script={[
-        {
-          src:
-            "https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.0/js/uikit.min.js",
-        },
-        {
-          src:
-            "https://cdn.jsdelivr.net/npm/uikit@3.2.3/dist/js/uikit-icons.min.js",
-        },
-        {
-          src: "https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.0/js/uikit.js",
+          href: favicon.url,
         },
       ]}
       meta={metaTags}
@@ -128,16 +111,18 @@ SEO.defaultProps = {
 
 const query = graphql`
   query {
-    strapiGlobal {
-      siteName
-      favicon {
-        publicURL
-      }
-      defaultSeo {
-        metaTitle
-        metaDescription
-        shareImage {
-          publicURL
+    cms {
+      global {
+        siteName
+        favicon {
+          url
+        }
+        defaultSeo {
+          metaTitle
+          metaDescription
+          shareImage {
+            url
+          }
         }
       }
     }
