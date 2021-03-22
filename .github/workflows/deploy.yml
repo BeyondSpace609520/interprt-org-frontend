@@ -39,7 +39,7 @@ jobs:
         run: yarn build
 
       - name: Deploy website on S3 bucket
-        run: aws s3 sync ./dist/ s3://interprt-org --delete
+        run: aws s3 sync ./public/ s3://interprt-org --delete
 
       - name: Cloudfront Invalidation
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_ID }} --paths "/*"
