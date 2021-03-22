@@ -1,0 +1,40 @@
+name: CI/CD
+on:
+  repository_dispatch:
+    types: ssg
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+          aws-region: us-east-2
+
+      - name: Cache Packages
+        uses: actions/cache@v2
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install Packages
+        run: yarn install
+
+      - name: Generate Static Pages
+        run: yarn build
+
+      - name: Deploy website on S3 bucket
+        run: aws s3 sync ./dist/ s3://interprt-org --delete
+
+      - name: Cloudfront Invalidation
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_ID }} --paths "/*"
