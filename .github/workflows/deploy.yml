@@ -26,6 +26,18 @@ jobs:
           touch .env
           echo API_URL = ${{ secrets.API_URL }} >> .env
 
+      - name: Gatsby Cache Folder
+        uses: actions/cache@v1
+        with:
+          key: gatsby-cache-folder
+          path: .cache
+
+      - name: Gatsby Public Folder
+        uses: actions/cache@v1
+        with:
+          key: gatsby-public-folder
+          path: public
+
       - name: Cache Packages
         uses: actions/cache@v2
         with:
@@ -36,7 +48,7 @@ jobs:
         run: yarn install
 
       - name: Generate Static Pages
-        run: yarn build
+        run: 'yarn run build:incremental'
 
       - name: Deploy website on S3 bucket
         run: aws s3 sync ./public/ s3://interprt-org --delete
