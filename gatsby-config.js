@@ -36,13 +36,6 @@ module.exports = {
         icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
       },
     },
-    {
-      resolve: "@sentry/gatsby",
-      options: {
-        dsn: "https://32464511f3604bb890e323bf06f680e1@o556915.ingest.sentry.io/5688427",
-        sampleRate: 0.7,
-      },
-    },
     `gatsby-plugin-gatsby-cloud`,
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
